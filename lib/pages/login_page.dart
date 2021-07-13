@@ -10,10 +10,27 @@ class loginPage extends StatefulWidget {
   _loginPageState createState() => _loginPageState();
 }
 
-String name = "";
-bool chageButton = false;
-
 class _loginPageState extends State<loginPage> {
+  String name = "";
+  bool chageButton = false;
+  final _formKey = GlobalKey<FormState>();
+
+  moveToHome(BuildContext context) async {
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        chageButton = true;
+      });
+      await Future.delayed(Duration(microseconds: 70));
+      await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => homePage()),
+      );
+      setState(() {
+        chageButton = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,86 +42,94 @@ class _loginPageState extends State<loginPage> {
             padding: const EdgeInsets.all(10.0),
             child: Center(
               child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Image.asset(
-                        "assets/login.png",
-                        scale: 4,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Text(
-                      "Welocome $name",
-                      textScaleFactor: 3,
-                      style: TextStyle(
-                        color: Colors.black87,
-                        // fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      onChanged: (value) {
-                        name = value;
-                        setState(() {});
-                      },
-                      autofocus: true,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Image.asset(
+                          "assets/login.png",
+                          scale: 4,
+                          fit: BoxFit.cover,
                         ),
-                        hintText: "Enter User Name",
-                        labelText: "User Name",
                       ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
+                      Text(
+                        "Welocome $name",
+                        textScaleFactor: 3,
+                        style: TextStyle(
+                          color: Colors.black87,
+                          // fontWeight: FontWeight.bold,
                         ),
-                        hintText: "Enter Password",
-                        labelText: "Password",
                       ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    AnimatedContainer(
-                      width: double.infinity,
-                      duration: Duration(seconds: 1),
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          setState(() {
-                            chageButton = true;
-                          });
-                          await Future.delayed(Duration(microseconds: 70));
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => homePage()),
-                          );
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Useer name can't be empty";
+                          }
                         },
-                        child: chageButton
-                            ? Icon(Icons.done)
-                            : Text(
-                                "Login",
-                                style: TextStyle(
-                                  fontSize: 28,
-                                ),
-                              ),
-                        style: TextButton.styleFrom(),
+                        onChanged: (value) {
+                          name = value;
+                          setState(() {});
+                        },
+                        autofocus: true,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                          ),
+                          hintText: "Enter User Name",
+                          labelText: "User Name",
+                        ),
                       ),
-                    ),
-                  ],
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Password can't be empty";
+                          } else if (value.length < 6) {
+                            return "Minimum password length is 6";
+                          }
+                        },
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                          ),
+                          hintText: "Enter Password",
+                          labelText: "Password",
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      AnimatedContainer(
+                        width: double.infinity,
+                        duration: Duration(seconds: 1),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            moveToHome(context);
+                          },
+                          child: chageButton
+                              ? Icon(Icons.done)
+                              : Text(
+                                  "Login",
+                                  style: TextStyle(
+                                    fontSize: 28,
+                                  ),
+                                ),
+                          style: TextButton.styleFrom(),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
