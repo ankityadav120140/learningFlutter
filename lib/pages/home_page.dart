@@ -22,6 +22,7 @@ class _homePageState extends State<homePage> {
           child: Center(
             child: Text(
               "Mai nahi jaunga vaha",
+              textScaleFactor: 1.5,
             ),
           ),
         ),
