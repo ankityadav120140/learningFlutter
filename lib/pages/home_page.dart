@@ -19,7 +19,11 @@ class _homePageState extends State<homePage> {
           ),
         ),
         body: Container(
-          child: Text("Mai nahi jaunga vaha"),
+          child: Center(
+            child: Text(
+              "Mai nahi jaunga vaha",
+            ),
+          ),
         ),
         drawer: Drawer(),
         endDrawer: Drawer(),
