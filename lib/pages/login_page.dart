@@ -10,6 +10,9 @@ class loginPage extends StatefulWidget {
   _loginPageState createState() => _loginPageState();
 }
 
+String name = "";
+bool chageButton = false;
+
 class _loginPageState extends State<loginPage> {
   @override
   Widget build(BuildContext context) {
@@ -33,7 +36,7 @@ class _loginPageState extends State<loginPage> {
                       ),
                     ),
                     Text(
-                      "Welocome",
+                      "Welocome $name",
                       textScaleFactor: 3,
                       style: TextStyle(
                         color: Colors.black87,
@@ -44,6 +47,10 @@ class _loginPageState extends State<loginPage> {
                       height: 10,
                     ),
                     TextFormField(
+                      onChanged: (value) {
+                        name = value;
+                        setState(() {});
+                      },
                       autofocus: true,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
@@ -72,21 +79,28 @@ class _loginPageState extends State<loginPage> {
                     SizedBox(
                       height: 20,
                     ),
-                    Container(
+                    AnimatedContainer(
                       width: double.infinity,
+                      duration: Duration(seconds: 1),
                       child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          setState(() {
+                            chageButton = true;
+                          });
+                          await Future.delayed(Duration(microseconds: 70));
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => homePage()),
                           );
                         },
-                        child: Text(
-                          "Login",
-                          style: TextStyle(
-                            fontSize: 28,
-                          ),
-                        ),
+                        child: chageButton
+                            ? Icon(Icons.done)
+                            : Text(
+                                "Login",
+                                style: TextStyle(
+                                  fontSize: 28,
+                                ),
+                              ),
                         style: TextButton.styleFrom(),
                       ),
                     ),
